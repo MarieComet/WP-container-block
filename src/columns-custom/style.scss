@@ -1,0 +1,21 @@
+/**
+ * #.# Styles
+ *
+ * CSS for both Frontend+Backend.
+ */
+
+.wp-block-cgb-block-columns-block {
+	display: flex;
+}
+.wp-block-cgb-block-columns-block.one-third .wp-block-cgb-column:nth-child(2), .wp-block-cgb-block-columns-block.one-third .editor-block-list__block:nth-child(2),
+.wp-block-cgb-block-columns-block.quart-quart-half .wp-block-cgb-column:nth-child(3), .wp-block-cgb-block-columns-block.quart-quart-half .editor-block-list__block:nth-child(3),
+.wp-block-cgb-block-columns-block.half-quart-quart .wp-block-cgb-column:nth-child(1), .wp-block-cgb-block-columns-block.half-quart-quart .editor-block-list__block:nth-child(1),
+.wp-block-cgb-block-columns-block.quart-half-quart .wp-block-cgb-column:nth-child(2), .wp-block-cgb-block-columns-block.quart-half-quart .editor-block-list__block:nth-child(2),
+
+ {
+	flex: 2;
+}
+
+.wp-block-cgb-column {
+	flex: 1;
+}

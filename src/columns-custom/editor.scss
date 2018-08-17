@@ -1,0 +1,83 @@
+/**
+ * #.# Editor Styles
+ *
+ * CSS for just Backend enqueued after style.scss
+ * which makes it higher in priority.
+ */
+
+$parent-block-padding: 28px; // padding of top level blocks, should be larger than $block-padding, otherwise a user can't select the parent from a child
+$block-padding: 14px; // padding of nested blocks
+$block-spacing: 4px; // vertical space between blocks
+$block-side-ui-width: 28px;
+$block-side-ui-clearance: 2px;
+$block-side-ui-padding: $block-side-ui-width + $block-side-ui-clearance;
+
+// These margins make sure that nested blocks stack/overlay with the parent block chrome
+// This is sort of an experiment at making sure the editor looks as much like the end result as possible
+// Potentially the rules here can apply to all nested blocks and enable stacking, in which case it should be moved elsewhere
+// When using CSS grid, margins do not collapse on the container.
+.wp-block-cgb-block-columns-block {
+	margin: 1.5rem 0;
+}
+.wp-block-cgb-block-columns-block .editor-block-list__layout {
+	margin-left: 0;
+	margin-right: 0;
+
+	&:first-child {
+		margin-left: -$block-padding;
+	}
+	&:last-child {
+		margin-right: -$block-padding;
+	}
+
+	// This max-width is used to constrain the main editor column, it should not cascade into columns
+	.editor-block-list__block {
+		max-width: none;
+		flex: 1;
+	}
+}
+
+// Fullwide: show margin left/right to ensure there's room for the side UI
+// This is not a 1:1 preview with the front-end where these margins would presumably be zero
+// @todo this could be revisited, by for example showing this margin only when the parent block was selected first
+// Then at least an unselected columns block would be an accurate preview
+.editor-block-list__block[data-align="full"] .wp-block-cgb-block-columns-block .editor-block-list__layout {
+	&:first-child {
+		margin-left: $block-side-ui-padding;
+	}
+	&:last-child {
+		margin-right: $block-side-ui-padding;
+	}
+}
+
+// This block has flex container children. Flex container margins do not collapse: https://www.w3.org/TR/css-flexbox-1/#flex-containers.
+// Therefore, let's at least not add any additional margins here.
+// The goal is for the editor to look more like the front-end.
+.editor-block-list__layout .editor-block-list__block[data-type="cgb/block-columns-block"] > .editor-block-list__block-edit,
+.editor-block-list__layout .editor-block-list__block[data-type="cgb/block-columns-block"] > .editor-block-list__block-edit {
+	margin-top: 0;
+	margin-bottom: 0;
+
+	// This uncollapses margins on this parent container.
+	padding-top: 0.1px;
+	padding-bottom: 0.1px;
+}
+
+.wp-block-cgb-block-columns-block {
+	display: block;
+
+	> .editor-inner-blocks > .editor-block-list__layout {
+		display: flex;
+
+		> [data-type="core/column"] {
+			display: flex;
+			flex-direction: column;
+			flex: 1;
+			width: 0;
+
+			.editor-block-list__block-edit {
+				flex-basis: 100%;
+			}
+		}
+	}
+}
