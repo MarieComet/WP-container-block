@@ -150,6 +150,7 @@ registerBlockType( 'cgb/block-columns-block', {
 	edit( { attributes, setAttributes, className } ) {
 
 		const { columns, backgroundColor, columnsStructure, structureList } = attributes;
+
 		const classes = classnames( className, `has-${ columns }-columns`, columnsStructure );
 
 		const updateStructureList = numberColumns => {
@@ -182,9 +183,10 @@ registerBlockType( 'cgb/block-columns-block', {
 			    structureList = [ { value: '100', 'label': '100'} ]
 			}
 
+
 			setAttributes( {
 				structureList: structureList,
-				columnsStructure: structureList[0].value,
+				columnsStructure: columnsStructure ? columnsStructure : structureList[0].value,
 			} );
 		}
 
