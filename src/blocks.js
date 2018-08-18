@@ -9,5 +9,5 @@
  * Webpack is compiling as the input file.
  */
 
-import './columns-custom/index.js';
-import './columns-custom/column.js';
+import './columns/index.js';
+import './columns/column.js';

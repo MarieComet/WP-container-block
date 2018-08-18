@@ -22,10 +22,10 @@ import memoize from 'memize';
  * WordPress dependencies
  */
 const { __, sprintf } = wp.i18n;
-const { PanelBody, RangeControl, PanelColor, ColorPalette, SelectControl } = wp.components;
+const { PanelBody, RangeControl, PanelColor, ColorPalette, SelectControl, IconButton } = wp.components;
 const { Fragment } = wp.element;
 const { createBlock, registerBlockType } = wp.blocks;
-const { InspectorControls, InnerBlocks } = wp.editor;
+const { InspectorControls, InnerBlocks, MediaUpload } = wp.editor;
 
 /**
  * Allowed blocks constant is passed to InnerBlocks precisely as specified here.
@@ -50,7 +50,7 @@ const getColumnsTemplate = memoize( ( columns ) => {
 } );
 
 
-registerBlockType( 'cgb/block-columns-block', {
+registerBlockType( 'cgb/columns', {
 	title: sprintf(
 		/* translators: Block title modifier */
 		__( '%1$s (%2$s)' ),
@@ -58,7 +58,10 @@ registerBlockType( 'cgb/block-columns-block', {
 		__( 'beta' )
 	),
 
-	icon: <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path fill="none" d="M0 0h24v24H0V0z" /><g><path d="M21 4H3L2 5v14l1 1h18l1-1V5l-1-1zM8 18H4V6h4v12zm6 0h-4V6h4v12zm6 0h-4V6h4v12z" /></g></svg>,
+	icon: <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+	  <path fill="none" d="M0 0h24v24H0V0z"/>
+	  <path d="M21 4H3L2 5v14l1 1h18l1-1V5zM6.4 18H4V6h2.4zm9.7 0H8V6h8zm3.9 0h-2.3l.1-12H20z"/>
+	</svg>,
 
 	category: 'layout',
 
@@ -69,7 +72,7 @@ registerBlockType( 'cgb/block-columns-block', {
 		},
 		backgroundColor: {
 			type: 'string',
-			selector: '.wp-block-cgb-block-columns-block',
+			selector: '.wp-block-cgb-columns',
 			default: '#fff',
 		},
 		columnsStructure: {
@@ -78,6 +81,13 @@ registerBlockType( 'cgb/block-columns-block', {
 		},
 		structureList: {
 			type: 'array'
+		},
+		backgroundImage: {
+			type: 'string',
+			selector: '.wp-block-cgb-columns',
+		},
+		containerImgID: {
+			type: 'number',
 		},
 
 	},
@@ -149,7 +159,9 @@ registerBlockType( 'cgb/block-columns-block', {
 
 	edit( { attributes, setAttributes, className } ) {
 
-		const { columns, backgroundColor, columnsStructure, structureList } = attributes;
+		console.log(attributes)
+
+		const { columns, backgroundColor, columnsStructure, structureList, backgroundImage, containerImgID } = attributes;
 
 		const classes = classnames( className, `has-${ columns }-columns`, columnsStructure );
 
@@ -190,6 +202,25 @@ registerBlockType( 'cgb/block-columns-block', {
 			} );
 		}
 
+		const onSelectImage = img => {
+			setAttributes( {
+				containerImgID: img.id,
+				backgroundImage: img.url,
+			} );
+		};
+
+		const onRemoveImage = () => {
+			setAttributes({
+				containerImgID: null,
+				backgroundImage: null,
+			});
+		}
+
+		const divStyle = {
+			backgroundColor: backgroundColor,
+			backgroundImage:  'url(' + backgroundImage + ')'
+		}
+
 		return (
 			<Fragment>
 				<InspectorControls>
@@ -210,12 +241,8 @@ registerBlockType( 'cgb/block-columns-block', {
 							options={ structureList }
 						/>
 					</PanelBody>
-					<PanelBody>
-						<PanelColor
-							title={ __( 'Background color' ) }
-							colorValue= { backgroundColor }
-							initialOpen={ false }
-						>
+					<PanelBody title={ __( 'Background Options' ) } initialOpen={ false } >
+						<p>{ __( 'Select a background color:' ) }</p>
 							<ColorPalette
 								label={ __( 'Background color' ) }
 								value={ backgroundColor }
@@ -225,13 +252,40 @@ registerBlockType( 'cgb/block-columns-block', {
 									} );
 								} }
 							/>
-						</PanelColor>
+						<p>{ __( 'Select a background image:' ) }</p>
+						<MediaUpload
+							onSelect={ onSelectImage }
+							type="image"
+							value={ containerImgID }
+							render={ ( { open } ) => (
+								<div>
+									<IconButton
+										className="cgb-container-inspector-media"
+										label={ __( 'Edit image' ) }
+										icon="format-image"
+										onClick={ open }
+									>
+										{ __( 'Select Image' ) }
+									</IconButton>
+
+									{ backgroundImage && !! backgroundImage.length && (
+										<IconButton
+											className="cgb-container-inspector-media"
+											label={ __( 'Remove Image' ) }
+											icon="dismiss"
+											onClick={ onRemoveImage }
+										>
+											{ __( 'Remove' ) }
+										</IconButton>
+									) }
+								</div>
+							) }
+						>
+						</MediaUpload>
 					</PanelBody>
 				</InspectorControls>
 				<div className={ classes }
-				style={ {
-					backgroundColor: backgroundColor
-				} } >
+				style={ divStyle } >
 					<InnerBlocks
 						template={ getColumnsTemplate( columns ) }
 						templateLock="all"
@@ -242,9 +296,14 @@ registerBlockType( 'cgb/block-columns-block', {
 	},
 
 	save( { attributes } ) {
-		const { columns, columnsStructure, backgroundColor } = attributes;
+		const { columns, columnsStructure, backgroundColor, backgroundImage } = attributes;
+		const divStyle = {
+			backgroundColor: backgroundColor,
+			backgroundImage:  'url(' + backgroundImage + ')'
+		}
+
 		return (
-			<div className={ `has-${ columns }-columns ${ columnsStructure }` } style={ { backgroundColor: backgroundColor } } >
+			<div className={ `has-${ columns }-columns ${ columnsStructure }` } style={ divStyle } >
 				<InnerBlocks.Content />
 			</div>
 		);

@@ -8,7 +8,7 @@ const { registerBlockType } = wp.blocks;
 registerBlockType( 'cgb/column', {
 	title: __( 'Column' ),
 
-	parent: [ 'cgb/block-columns-block' ],
+	parent: [ 'cgb/columns' ],
 
 	icon: 'columns',
 
