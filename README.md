@@ -1,3 +1,12 @@
+## 👉 WordPress Editor block
+
+## "Columns" core block fork, a "Container" block with two options :
+- Columns structure
+- Background color
+
+## Screenshot
+![Editor view](https://github.com/MarieComet/WP-container-block/blob/master/screenshot.png "Editor view")
+
 This project was bootstrapped with [Create Guten Block](https://github.com/ahmadawais/create-guten-block).
 
 Below you will find some information on how to run scripts.
