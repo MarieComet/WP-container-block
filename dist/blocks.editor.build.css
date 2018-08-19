@@ -48,8 +48,6 @@
       display: flex;
       -ms-flex-direction: column;
           flex-direction: column;
-      -ms-flex: 1;
-          flex: 1;
       width: 0; }
       .wp-block-cgb-columns > .editor-inner-blocks > .editor-block-list__layout > [data-type="cgb/column"] .editor-block-list__block-edit {
         -ms-flex-preferred-size: 100%;

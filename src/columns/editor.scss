@@ -72,7 +72,6 @@ $block-side-ui-padding: $block-side-ui-width + $block-side-ui-clearance;
 		> [data-type="cgb/column"] {
 			display: flex;
 			flex-direction: column;
-			flex: 1;
 			width: 0;
 
 			.editor-block-list__block-edit {
