@@ -10,13 +10,17 @@
 See screenshots below :
 
 ## Screenshot
-Editor view:
+
+## Editor view:
 ![Editor view](https://github.com/MarieComet/WP-container-block/blob/master/editor.png "Editor view")
-Front view :
+
+## Front view :
 ![Front view](https://github.com/MarieComet/WP-container-block/blob/master/front.png "Front view")
-Columns structures availables :
+
+## Columns structures availables :
 ![Possibles structures](https://github.com/MarieComet/WP-container-block/blob/master/structure.png "Structures")
-Inner containers :
+
+## Inner containers :
 ![Inner containers](https://github.com/MarieComet/WP-container-block/blob/master/examples.png "Inner containers")
 
 This project was bootstrapped with [Create Guten Block](https://github.com/ahmadawais/create-guten-block).
