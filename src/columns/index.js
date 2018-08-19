@@ -73,7 +73,6 @@ registerBlockType( 'cgb/columns', {
 		backgroundColor: {
 			type: 'string',
 			selector: '.wp-block-cgb-columns',
-			default: '#fff',
 		},
 		columnsStructure: {
 			type: 'string',
@@ -89,7 +88,21 @@ registerBlockType( 'cgb/columns', {
 		containerImgID: {
 			type: 'number',
 		},
-
+		backgroundPosition: {
+			type: 'string',
+			selector: '.wp-block-cgb-columns',
+			default: 'center',
+		},
+		backgroundSize: {
+			type: 'string',
+			selector: '.wp-block-cgb-columns',
+			default: 'cover',
+		},
+		backgroundRepeat: {
+			type: 'string',
+			selector: '.wp-block-cgb-columns',
+			default: 'no-repeat',
+		},
 	},
 
 	description: __( 'Add a block that displays content in multiple columns, then add whatever content blocks you’d like.' ),
@@ -161,7 +174,7 @@ registerBlockType( 'cgb/columns', {
 
 		console.log(attributes)
 
-		const { columns, backgroundColor, columnsStructure, structureList, backgroundImage, containerImgID } = attributes;
+		const { columns, backgroundColor, columnsStructure, structureList, backgroundImage, containerImgID, backgroundPosition, backgroundSize, backgroundRepeat } = attributes;
 
 		const classes = classnames( className, `has-${ columns }-columns`, columnsStructure );
 
@@ -218,7 +231,10 @@ registerBlockType( 'cgb/columns', {
 
 		const divStyle = {
 			backgroundColor: backgroundColor,
-			backgroundImage:  'url(' + backgroundImage + ')'
+			backgroundImage:  backgroundImage ? 'url(' + backgroundImage + ')' : undefined,
+			backgroundPosition: backgroundPosition,
+			backgroundSize: backgroundSize,
+			backgroundRepeat: backgroundRepeat,
 		}
 
 		return (
@@ -282,6 +298,55 @@ registerBlockType( 'cgb/columns', {
 							) }
 						>
 						</MediaUpload>
+
+						{ backgroundImage && !! backgroundImage.length && (
+						<div>
+							<div>
+							<SelectControl
+								label={ __( 'Background position' ) }
+								value={ backgroundPosition } // e.g: value = [ 'a', 'c' ]
+								onChange={ ( bgPositionChoice ) => {
+									setAttributes( { backgroundPosition: bgPositionChoice } )
+								} }
+								options={ [
+									{ value: 'center', label: __( 'Center' ) },
+									{ value: 'left', label: __( 'Left' ) },
+									{ value: 'right', label: __( 'Right' ) },
+									{ value: 'bottom', label: __( 'Bottom' ) },
+									{ value: 'top', label: __( 'Top' ) },
+								] }
+							/>
+							</div>
+							<div>
+							<SelectControl
+								label={ __( 'Background Size' ) }
+								value={ backgroundSize } // e.g: value = [ 'a', 'c' ]
+								onChange={ ( bgSizeChoice ) => {
+									setAttributes( { backgroundSize: bgSizeChoice } )
+								} }
+								options={ [
+									{ value: 'cover', label: __( 'Cover' ) },
+									{ value: 'contain', label: __( 'Contain' ) },
+								] }
+							/>
+							</div>
+							<div>
+							<SelectControl
+								label={ __( 'Background Repeat' ) }
+								value={ backgroundRepeat } // e.g: value = [ 'a', 'c' ]
+								onChange={ ( bgRepeatChoice ) => {
+									setAttributes( { backgroundRepeat: bgRepeatChoice } )
+								} }
+								options={ [
+									{ value: 'no-repeat', label: __( 'No repeat' ) },
+									{ value: 'repeat', label: __( 'Repeat' ) },
+									{ value: 'repeat-x', label: __( 'Repeat x' ) },
+									{ value: 'repeat-y', label: __( 'Repeat y' ) },
+								] }
+							/>
+							</div>
+						</div>
+						) }
 					</PanelBody>
 				</InspectorControls>
 				<div className={ classes }
@@ -296,10 +361,13 @@ registerBlockType( 'cgb/columns', {
 	},
 
 	save( { attributes } ) {
-		const { columns, columnsStructure, backgroundColor, backgroundImage } = attributes;
+		const { columns, columnsStructure, backgroundColor, backgroundImage, backgroundPosition, backgroundSize, backgroundRepeat } = attributes;
 		const divStyle = {
 			backgroundColor: backgroundColor,
-			backgroundImage:  'url(' + backgroundImage + ')'
+			backgroundImage:  backgroundImage ? 'url(' + backgroundImage + ')' : undefined,
+			backgroundPosition: backgroundPosition,
+			backgroundSize: backgroundSize,
+			backgroundRepeat: backgroundRepeat,
 		}
 
 		return (
