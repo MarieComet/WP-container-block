@@ -52,3 +52,6 @@
       .wp-block-cgb-columns > .editor-inner-blocks > .editor-block-list__layout > [data-type="cgb/column"] .editor-block-list__block-edit {
         -ms-flex-preferred-size: 100%;
             flex-basis: 100%; }
+
+input.input-inline {
+  display: block; }

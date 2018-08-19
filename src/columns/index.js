@@ -22,7 +22,7 @@ import memoize from 'memize';
  * WordPress dependencies
  */
 const { __, sprintf } = wp.i18n;
-const { PanelBody, RangeControl, PanelColor, ColorPalette, SelectControl, IconButton } = wp.components;
+const { PanelBody, RangeControl, PanelColor, ColorPalette, SelectControl, IconButton, BaseControl } = wp.components;
 const { Fragment } = wp.element;
 const { createBlock, registerBlockType } = wp.blocks;
 const { InspectorControls, InnerBlocks, MediaUpload } = wp.editor;
@@ -80,6 +80,26 @@ registerBlockType( 'cgb/columns', {
 		},
 		structureList: {
 			type: 'array'
+		},
+		paddingUnit: {
+			type: 'string',
+			default: 'px',
+		},
+		paddingTop: {
+			type: 'number',
+			default: 0,
+		},
+		paddingRight: {
+			type: 'number',
+			default: 0,
+		},
+		paddingBottom: {
+			type: 'number',
+			default: 0,
+		},
+		paddingLeft: {
+			type: 'number',
+			default: 0,
 		},
 		backgroundImage: {
 			type: 'string',
@@ -172,11 +192,14 @@ registerBlockType( 'cgb/columns', {
 
 	edit( { attributes, setAttributes, className } ) {
 
-		console.log(attributes)
+		const { columns, backgroundColor, columnsStructure, structureList, backgroundImage, containerImgID, backgroundPosition, backgroundSize, backgroundRepeat, paddingUnit, paddingTop, paddingRight, paddingBottom, paddingLeft } = attributes;
 
-		const { columns, backgroundColor, columnsStructure, structureList, backgroundImage, containerImgID, backgroundPosition, backgroundSize, backgroundRepeat } = attributes;
-
-		const classes = classnames( className, `has-${ columns }-columns`, columnsStructure );
+		const classes = classnames(
+			className,
+			`has-${ columns }-columns`,
+			columnsStructure,
+			{ 'bg-multiply' : backgroundImage && backgroundImage.length && backgroundColor && backgroundColor.length },
+		);
 
 		const updateStructureList = numberColumns => {
 
@@ -235,6 +258,10 @@ registerBlockType( 'cgb/columns', {
 			backgroundPosition: backgroundPosition,
 			backgroundSize: backgroundSize,
 			backgroundRepeat: backgroundRepeat,
+			paddingTop: paddingTop + paddingUnit,
+			paddingRight: paddingRight + paddingUnit,
+			paddingBottom: paddingBottom + paddingUnit,
+			paddingLeft: paddingLeft + paddingUnit,
 		}
 
 		return (
@@ -256,6 +283,74 @@ registerBlockType( 'cgb/columns', {
 							} }
 							options={ structureList }
 						/>
+					</PanelBody>
+					<PanelBody title={ __( 'Spacing' ) } initialOpen={ false } >
+						<SelectControl
+							label={ __( 'Padding unit' ) }
+							value={ paddingUnit } // e.g: value = [ 'a', 'c' ]
+							onChange={ ( value ) => {
+								setAttributes( { paddingUnit: value } )
+							} }
+							options={ [
+									{ value: 'px', label: __( 'Px' ) },
+									{ value: 'em', label: __( 'Em' ) },
+									{ value: '%', label: __( 'Percent' ) },
+							] }
+						/>
+						<BaseControl
+								id="paddings"
+								label="Padding"
+							>
+								<label for="padding-top">{ __( 'Top' ) }</label>
+								<input
+									id="padding-top"
+									name="paddingTop"
+									className="input-inline"
+									type="number"
+									min="0"
+									value={ paddingTop }
+									onChange={ ( event ) => {
+										setAttributes( { paddingTop: event.target.value } )
+									} }
+								/>
+								<label for="padding-right">{ __( 'Right' ) }</label>
+								<input
+									id="padding-right"
+									name="paddingRight"
+									className="input-inline"
+									type="number"
+									min="0"
+									value={ paddingRight }
+									onChange={ ( event ) => {
+										setAttributes( { paddingRight: event.target.value } )
+									} }
+								/>
+								<label for="padding-bottom">{ __( 'Bottom' ) }</label>
+								<input
+									id="padding-bottom"
+									name="paddingBottom"
+									className="input-inline"
+									type="number"
+									min="0"
+									value={ paddingBottom }
+									onChange={ ( event ) => {
+										setAttributes( { paddingBottom: event.target.value } )
+									} }
+								/>
+								<label for="padding-left">{ __( 'Left' ) }</label>
+								<input
+									id="padding-left"
+									name="paddingLeft"
+									className="input-inline"
+									type="number"
+									min="0"
+									value={ paddingLeft }
+									onChange={ ( event ) => {
+										setAttributes( { paddingLeft: event.target.value } )
+									} }
+								/>
+						</BaseControl>
+
 					</PanelBody>
 					<PanelBody title={ __( 'Background Options' ) } initialOpen={ false } >
 						<p>{ __( 'Select a background color:' ) }</p>
@@ -360,18 +455,29 @@ registerBlockType( 'cgb/columns', {
 		);
 	},
 
-	save( { attributes } ) {
-		const { columns, columnsStructure, backgroundColor, backgroundImage, backgroundPosition, backgroundSize, backgroundRepeat } = attributes;
+	save( { attributes, className } ) {
+		const { columns, columnsStructure, backgroundColor, backgroundImage, backgroundPosition, backgroundSize, backgroundRepeat, paddingUnit, paddingTop, paddingRight, paddingBottom, paddingLeft } = attributes;
 		const divStyle = {
 			backgroundColor: backgroundColor,
 			backgroundImage:  backgroundImage ? 'url(' + backgroundImage + ')' : undefined,
 			backgroundPosition: backgroundPosition,
 			backgroundSize: backgroundSize,
 			backgroundRepeat: backgroundRepeat,
+			paddingTop: paddingTop + paddingUnit,
+			paddingRight: paddingRight + paddingUnit,
+			paddingBottom: paddingBottom + paddingUnit,
+			paddingLeft: paddingLeft + paddingUnit,
 		}
 
+		const classes = classnames(
+			className,
+			`has-${ columns }-columns`,
+			columnsStructure,
+			{ 'bg-multiply' : backgroundImage && backgroundImage.length && backgroundColor && backgroundColor.length },
+		);
+
 		return (
-			<div className={ `has-${ columns }-columns ${ columnsStructure }` } style={ divStyle } >
+			<div className={ classes } style={ divStyle } >
 				<InnerBlocks.Content />
 			</div>
 		);

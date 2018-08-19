@@ -28,3 +28,6 @@
 @media (max-width: 768px) {
   .wp-block-cgb-columns {
     display: block; } }
+
+.wp-block-cgb-columns.bg-multiply {
+  background-blend-mode: multiply; }

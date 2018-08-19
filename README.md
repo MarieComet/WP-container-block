@@ -1,11 +1,20 @@
 ## 👉 WordPress Editor block
 
-## "Columns" core block fork, a "Container" block with two options :
+## "Columns" core block fork, a "Container" block with some options to build layouts :
 - Columns structure
-- Background color
+- Spacing (paddings)
+- Backgrounds :
+	- Image (size, position, repeat)
+	- Color
+
+See screenshots below :
 
 ## Screenshot
-![Editor view](https://github.com/MarieComet/WP-container-block/blob/master/screenshot.png "Editor view")
+![Editor view](https://github.com/MarieComet/WP-container-block/blob/master/editor.png "Editor view")
+
+![Front view](https://github.com/MarieComet/WP-container-block/blob/master/front.png "Front view")
+
+![Possibles structures](https://github.com/MarieComet/WP-container-block/blob/master/structure.png "Structures")
 
 This project was bootstrapped with [Create Guten Block](https://github.com/ahmadawais/create-guten-block).
 
