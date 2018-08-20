@@ -6,10 +6,13 @@
 - Backgrounds :
 	- Image (size, position, repeat)
 	- Color
+	
+## :warning: Please note this block is still in development, that's mean it could be broken frequently !
 
-See screenshots below :
+## Known issues :
+- It's not easy to focus the container block and access options. This block is based on "Columns" core block, which is itself not easy to use. Tip : focus the inner "Column" block and go up to the parent Container with the up arrow key.
 
-## Screenshot
+## Screenshots
 
 ## Editor view:
 ![Editor view](https://github.com/MarieComet/WP-container-block/blob/master/editor.png "Editor view")
